@@ -15,7 +15,7 @@
 		String id = request.getParameter("id");
 		String passwd = request.getParameter("passwd");
 		
-		boolean isValidMember = MemberDAO.getInstance().login(id, passwd);
+		boolean isValidMember = MemberDAO.getInstance().loginMember(id, passwd);
 		
 		if(isValidMember) {
 			
@@ -39,7 +39,7 @@
 </html>
 
 <!-- 
-	07_login.jsp → 08_loginPro.jsp → MemberDAO.login() → 08_loginPro.jsp → login!
+	07_login.jsp → 08_loginPro.jsp → MemberDAO.loginMember() → 08_loginPro.jsp → login!
 
 	07_login.jsp에서 입력받은 정보를 08_loginPro.jsp에서 전송 받아 MemberDAO의 로그인메소드를 호출하여 
 	DB의 회원 정보와 비교, 결과값을 반환받아 로그인 여부를 판단한다 (true : 로그인 성공/false : 실패)

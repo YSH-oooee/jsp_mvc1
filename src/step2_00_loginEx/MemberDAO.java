@@ -25,7 +25,7 @@ public class MemberDAO {
 		String dbPass = "root";
 		
 		try {
-			//.cj 없는게 최신버전
+			//.cj가 붙으면 구버전
 			Class.forName("com.mysql.cj.jdbc.Driver");
 			
 			conn = DriverManager.getConnection(dbUrl, dbId, dbPass);
@@ -37,9 +37,128 @@ public class MemberDAO {
 		return conn;
 		
 	}
+
+	//insert
+	public boolean insertMember(MemberDTO mdto) {
+		
+		boolean isFirstMember = false;
+		
+		try {
+			
+			conn = getConnection();
+			
+			pstmt = conn.prepareStatement("select * from member where id=?");
+			pstmt.setString(1, mdto.getId());
+			
+			rs = pstmt.executeQuery();
+			
+			//조회된 id가 없다면, 가입 가능
+			if (!rs.next()) {
+				
+				pstmt = conn.prepareStatement("insert into member values(?, ?, ?, now())");
+				pstmt.setString(1, mdto.getId());
+				pstmt.setString(2, mdto.getPasswd());
+				pstmt.setString(3, mdto.getName());
+				
+				pstmt.executeUpdate();
+				
+				isFirstMember = true;
+				
+			}
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			if (rs != null) { try { rs.close(); } catch (Exception e2) { e2.printStackTrace(); } }
+			if (pstmt != null) { try { pstmt.close(); } catch (Exception e2) { e2.printStackTrace(); } }
+			if (conn != null) { try { conn.close(); } catch (Exception e2) { e2.printStackTrace(); } }
+		}
+		
+		return isFirstMember;
+		
+	}
+	
+	//leave(delete)
+	public boolean leaveMember(String id, String passwd) {
+		
+		boolean isLeaveMember = false;
+		
+		try {
+			
+			conn = getConnection();
+			
+			pstmt = conn.prepareStatement("select * from member where id=? and passwd=?");
+			pstmt.setString(1, id);
+			pstmt.setString(2, passwd);
+			
+			rs = pstmt.executeQuery();
+			
+			if (rs.next()) {
+				pstmt = conn.prepareStatement("delete from member where id=?");
+				pstmt.setString(1, id);
+				
+				pstmt.executeUpdate();
+				
+				isLeaveMember = true;
+				
+				System.out.println("Member 테이블의 계정이 삭제되었습니다.");
+				System.out.println(id + " / " + passwd);
+			}
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			if (rs != null) { try { rs.close(); } catch (Exception e2) { e2.printStackTrace(); } }
+			if (pstmt != null) { try { pstmt.close(); } catch (Exception e2) { e2.printStackTrace(); } }
+			if (conn != null) { try { conn.close(); } catch (Exception e2) { e2.printStackTrace(); } }
+		}
+		
+		return isLeaveMember;
+		
+	}
+	
+	//update
+	public boolean updateMember(MemberDTO mdto) {
+		
+		boolean isUpdateMember = false;
+		
+		try {
+			
+			conn = getConnection();
+			
+			pstmt = conn.prepareStatement("select * from member where id=? and passwd=?");
+			pstmt.setString(1, mdto.getId());
+			pstmt.setString(2, mdto.getPasswd());
+			
+			rs = pstmt.executeQuery();
+			
+			if (rs.next()) {
+				pstmt = conn.prepareStatement("update member set name=? where id=?");
+				pstmt.setString(1, mdto.getName());
+				pstmt.setString(2, mdto.getId());
+				
+				pstmt.executeUpdate();
+				
+				isUpdateMember = true;
+				
+				System.out.println("Member 테이블이 수정되었습니다.");
+				System.out.println(mdto.getId() + " / " + mdto.getPasswd() + " / " + mdto.getName());
+			}
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			if (rs != null) { try { rs.close(); } catch (Exception e2) { e2.printStackTrace(); } }
+			if (pstmt != null) { try { pstmt.close(); } catch (Exception e2) { e2.printStackTrace(); } }
+			if (conn != null) { try { conn.close(); } catch (Exception e2) { e2.printStackTrace(); } }
+		}
+		
+		return isUpdateMember;
+		
+	}
 	
 	//login DAO
-	public boolean login(String id, String passwd) {
+	public boolean loginMember(String id, String passwd) {
 		
 		boolean isValidMember = false;
 		
@@ -60,11 +179,13 @@ public class MemberDAO {
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
-			
+			if (rs != null) { try { rs.close(); } catch (Exception e2) { e2.printStackTrace(); } }
+			if (pstmt != null) { try { pstmt.close(); } catch (Exception e2) { e2.printStackTrace(); } }
+			if (conn != null) { try { conn.close(); } catch (Exception e2) { e2.printStackTrace(); } }
 		}
 		
 		return isValidMember;
 		
 	}
-
+	
 }
