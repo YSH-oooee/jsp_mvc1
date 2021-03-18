@@ -24,7 +24,7 @@
 		if(isFirstMember) {
 	%>
 		<script type="text/javascript">
-			alert("Congraturation! You are a member.");
+			alert("Congratulation! You are a member.");
 			location.href="00_main.jsp";
 		</script>
 	<%

@@ -10,6 +10,7 @@ public class MemberDTO {
 	private String name;
 	private Timestamp joindate;
 	
+	//추후 객체가 더욱 많을 때, 한번에 묶어서 불러올 수 있도록
 	public MemberDTO(String id, String passwd, String name) {
 		super();
 		this.id = id;

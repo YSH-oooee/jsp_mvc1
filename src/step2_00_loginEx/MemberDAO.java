@@ -26,7 +26,7 @@ public class MemberDAO {
 		
 		try {
 			//.cj가 붙으면 구버전
-			Class.forName("com.mysql.cj.jdbc.Driver");
+			Class.forName("com.mysql.jdbc.Driver");
 			
 			conn = DriverManager.getConnection(dbUrl, dbId, dbPass);
 			
