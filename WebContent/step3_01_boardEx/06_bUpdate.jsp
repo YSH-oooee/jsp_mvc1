@@ -15,7 +15,7 @@
 	
 		int num = Integer.parseInt(request.getParameter("num"));
 		
-		BoardDTO bdto = BoardDAO.getInstance().getOneUpdate(num);
+		BoardDTO bdto = BoardDAO.getInstance().getOneUpdateBaord(num);
 	%>
 	
 	<h1>게시글 수정하기</h1>
@@ -54,7 +54,7 @@
 			
 			<tr>
 				<td>비밀번호</td>
-				<td><input type="password" name="passwd"></td>
+				<td><input type="password" name="password"></td>
 			</tr>
 			
 			<tr>
@@ -65,6 +65,7 @@
 		
 		<p>
 			<input type="hidden" name="num" value="<%= bdto.getNum() %>">
+			<input type="hidden" name="writer" value="<%= bdto.getWriter() %>">
 			<input type="submit" value="수정하기">
 			<input type="button" value="목록으로" onclick="location.href='04_bList.jsp'">
 		</p>

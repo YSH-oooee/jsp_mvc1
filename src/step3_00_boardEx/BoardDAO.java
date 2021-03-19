@@ -160,7 +160,7 @@ public class BoardDAO {
 	}
 	
 	//하나의 게시글 수정을 위한 조회(조회수 증가X)
-	public BoardDTO getOneUpdate(int num) {
+	public BoardDTO getOneUpdateBaord(int num) {
 		
 		BoardDTO bdto = new BoardDTO();
 		
@@ -197,11 +197,107 @@ public class BoardDAO {
 		
 	}
 	
+	//비밀번호 인증
+	public boolean validMemberCheck(BoardDTO bdto) {
+		
+		boolean isValidMember = false;
+		
+		try {
+			
+			conn = getConnection();
+			
+			pstmt = conn.prepareStatement("select * from board where num=? and password=?");
+			pstmt.setInt(1, bdto.getNum());
+			pstmt.setString(2, bdto.getPassword());
+			
+			rs = pstmt.executeQuery();
+			
+			if (rs.next()) {
+				isValidMember = true;
+			}
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			if (rs != null) { try { rs.close(); } catch (SQLException e) { e.printStackTrace(); } }
+			if (pstmt != null) { try { pstmt.close(); } catch (SQLException e) { e.printStackTrace(); } }
+			if (conn != null) { try { conn.close(); } catch (SQLException e) { e.printStackTrace(); } }
+		}
+		
+		return isValidMember;
+		
+	}
+	
+	//게시글 수정
 	public boolean updateBoard(BoardDTO bdto) {
 		
 		boolean isUpdate = false;
 		
+		try {
+			
+			//비밀번호 인증
+			if (validMemberCheck(bdto)) {
+				
+				conn = getConnection();
+				
+				pstmt = conn.prepareStatement("update board set subject=?, content=? where num=?");
+				pstmt.setString(1, bdto.getSubject());
+				pstmt.setString(2, bdto.getContent());
+				pstmt.setInt(3, bdto.getNum());
+				
+				pstmt.executeUpdate();
+				
+				isUpdate = true;
+				
+				System.out.println("board테이블이 업데이트 되었습니다.");
+				System.out.println(bdto.getNum() + " / " + bdto.getWriter() + " / " + bdto.getSubject());
+				
+			}
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			if (rs != null) { try { rs.close(); } catch (SQLException e) { e.printStackTrace(); } }
+			if (pstmt != null) { try { pstmt.close(); } catch (SQLException e) { e.printStackTrace(); } }
+			if (conn != null) { try { conn.close(); } catch (SQLException e) { e.printStackTrace(); } }
+		}
+		
 		return isUpdate;
+		
+	}
+	
+	//게시글 삭제
+	public boolean deleteBoard(BoardDTO bdto) {
+		
+		boolean isDelete = false;
+		System.out.println(bdto.getPassword());
+		try {			
+			//비밀번호 인증
+			if (validMemberCheck(bdto)) {
+				
+				conn = getConnection();
+				
+				pstmt = conn.prepareStatement("delete from board where num=?");
+				pstmt.setInt(1, bdto.getNum());
+				
+				pstmt.executeUpdate();
+				
+				isDelete = true;
+				
+				System.out.println("board테이블의 멤버가 삭제 되었습니다.");
+				System.out.println(bdto.getNum() + " / " + bdto.getWriter() + " / " + bdto.getSubject());
+				
+			}
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			if (rs != null) { try { rs.close(); } catch (SQLException e) { e.printStackTrace(); } }
+			if (pstmt != null) { try { pstmt.close(); } catch (SQLException e) { e.printStackTrace(); } }
+			if (conn != null) { try { conn.close(); } catch (SQLException e) { e.printStackTrace(); } }
+		}
+		
+		return isDelete;
 		
 	}
 

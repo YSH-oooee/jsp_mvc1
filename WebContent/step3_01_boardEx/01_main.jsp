@@ -29,8 +29,8 @@
 	
 	--%>
 	
-	<img alt="jsp심볼" src="../img/jsp.PNG" width="200" height="200"> <br><br>
-	
+	<img alt="jsp심볼" src="../img/jsp.PNG" width="200" height="150"> <br><br>
+	<input type="button" value="게시판 보기" onclick="location.href='04_bList.jsp'">	
 
 </body>
 </html>

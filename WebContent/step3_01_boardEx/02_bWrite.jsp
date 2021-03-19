@@ -8,6 +8,8 @@
 </head>
 <body>
 
+	<h1>게시글 쓰기</h1>
+
 	<form action="03_bWritePro.jsp" method="post">
 		
 		<table border="1">
@@ -38,7 +40,7 @@
 			
 			<tr>
 				<td>글 내용</td>
-				<td><textarea row="10" cols="50" name="content"></textarea></td>
+				<td><textarea rows="10" cols="50" name="content"></textarea></td>
 			</tr>
 		</table>
 		
