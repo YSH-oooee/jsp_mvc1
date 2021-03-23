@@ -1,12 +1,21 @@
+<%@page import="step4_00_board.BoardDAO"%>
+<%@page import="step4_00_board.BoardDTO"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
 <head>
 <meta charset="UTF-8">
-<title>게시글 쓰기</title>
+<title>답변글 쓰기</title>
 </head>
 <body>
+
+	<%
+		//원본글 정보 호출
+		int num = Integer.parseInt(request.getParameter("num"));
+	
+		BoardDTO bdto = BoardDAO.getInstance().getOneBaord(num);
+	%>
 
 	<div align="center">
 		<br>
@@ -42,7 +51,10 @@
 				
 				<tr>
 					<td colspan="2" align="center">
-						<input type="submit" value="글쓰기">
+						<input type="hidden" value="<%= bdto.getRef() %>" name="ref">
+						<input type="hidden" value="<%= bdto.getRe_step() %>" name="re_step">
+						<input type="hidden" value="<%= bdto.getRe_level() %>" name="re_level">
+						<input type="submit" value="답글쓰기">
 						<input type="reset" value="다시작성">
 						<input type="button" value="목록보기" onclick="location.href='04_bList.jsp'">
 					</td>

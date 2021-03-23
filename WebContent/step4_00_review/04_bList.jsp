@@ -25,6 +25,7 @@
 	
 	<div align="center">
 	
+		<br>
 		<h2>전체 게시글 보기</h2>
 		
 		<table border="1" width="800">
@@ -52,7 +53,7 @@
 	%>
 			<tr>
 				<td align="center"><%= i+1 %></td>
-				<td><a href="05_bInfo.jsp?num='<%=bdto.getNum()%>'"><%= bdto.getTitle() %></a></td>
+				<td><a href="05_bInfo.jsp?num=<%=bdto.getNum()%>"><%= bdto.getTitle() %></a></td>
 				<td align="center"><%= bdto.getWriter() %></td>
 				<td align="center"><%= bdto.getReg_date() %></td>
 				<td align="center"><%= bdto.getRead_count() %></td>
