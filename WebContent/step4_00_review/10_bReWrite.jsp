@@ -20,7 +20,7 @@
 	<div align="center">
 		<br>
 		<!-- 작성자, 제목, 이메일, 비밀번호 반드시 입력 -->
-		<h2>게시글 쓰기</h2>
+		<h2>답변글 쓰기</h2>
 	
 		<form action="03_bWritePro.jsp" method="post">
 			<table border="1" width="700">

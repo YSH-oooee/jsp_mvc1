@@ -20,7 +20,7 @@
 	%>
 
 	<div align="right">
-		<input type="button" value="테스트 데이터 생성">
+		<input type="button" value="테스트 데이터 생성" onclick="location.href='99_dummyCreate.jsp?num=10'">
 	</div>
 	
 	<div align="center">
@@ -33,9 +33,9 @@
 				<td align="center" width="100">총 게시글 : <%= count %>개</td>
 				<td colspan="4" align="right">
 					<select name=board_count>
-						<option value="5">5</option>
-						<option value="7">7</option>
-						<option value="10" selected>10</option>
+						<option value="5">5개씩 보기</option>
+						<option value="7">7개씩 보기</option>
+						<option value="10" selected>10개씩 보기</option>
 					</select>
 				</td>
 			</tr>
@@ -48,12 +48,26 @@
 				<td width="50">조회수</td>
 			</tr>
 	<%
-		for(int i = boardList.size() - 1; i >= 0 ; i--) {
+		for(int i = 0; i < boardList.size(); i++) {
 			BoardDTO bdto = boardList.get(i);
 	%>
 			<tr>
-				<td align="center"><%= i+1 %></td>
-				<td><a href="05_bInfo.jsp?num=<%=bdto.getNum()%>"><%= bdto.getTitle() %></a></td>
+				<td align="center"><%= bdto.getNum() %></td>
+				<td>
+	<%
+			if(bdto.getRe_level() > 1) {
+				for(int j = 0; j < (bdto.getRe_level() - 1) * 3; j++) {
+	%>
+					&nbsp;
+	<%
+				}
+	%>
+				└ &nbsp;
+	<%
+			}
+	%>
+					<a href="05_bInfo.jsp?num=<%=bdto.getNum()%>"><%= bdto.getTitle() %></a>
+				</td>
 				<td align="center"><%= bdto.getWriter() %></td>
 				<td align="center"><%= bdto.getReg_date() %></td>
 				<td align="center"><%= bdto.getRead_count() %></td>
