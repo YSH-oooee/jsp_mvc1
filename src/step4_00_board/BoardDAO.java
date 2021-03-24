@@ -7,6 +7,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Random;
 
 import sun.nio.cs.ext.ISCII91;
 
@@ -44,7 +45,7 @@ public class BoardDAO {
 		
 	}
 	
-	//ÀüÃ¼ °Ô½Ã±Û °³¼ö
+	//ì „ì²´ ê²Œì‹œê¸€ ê°œìˆ˜
 	public int getAllBaordCount() {
 		
 		int count = 0;
@@ -73,7 +74,7 @@ public class BoardDAO {
 		
 	}
 	
-	//ºñ¹Ğ¹øÈ£ ÀÎÁõ
+	//ë¹„ë°€ë²ˆí˜¸ ì¸ì¦
 	public boolean checkPasswd(int num, String password) {
 		
 		boolean isCheck = false;
@@ -91,9 +92,9 @@ public class BoardDAO {
 			if (rs.next()) {
 				isCheck = true;
 				
-				System.out.println("ºñ¹Ğ¹øÈ£ ÀÎÁõ ¿Ï·á");
+				System.out.println("ë¹„ë°€ë²ˆí˜¸ ì¸ì¦ ì™„ë£Œ");
 			} else {
-				System.out.println("ºñ¹Ğ¹øÈ£ ÀÎÁõ ½ÇÆĞ");
+				System.out.println("ë¹„ë°€ë²ˆí˜¸ ì¸ì¦ ì‹¤íŒ¨");
 			}
 			
 		} catch (Exception e) {
@@ -108,7 +109,7 @@ public class BoardDAO {
 		
 	}
 	
-	//°Ô½Ã±Û ¾²±â(»õ °Ô½Ã±Û ref=¸¶Áö¸· ref+1 / re_step=1 / re_level=1)
+	//ê²Œì‹œê¸€ ì“°ê¸°(ìƒˆ ê²Œì‹œê¸€ ref=ë§ˆì§€ë§‰ ref+1 / re_step=1 / re_level=1)
 	public boolean writeBoard(BoardDTO bdto) {
 		
 		boolean isWrite = false;
@@ -146,7 +147,7 @@ public class BoardDAO {
 			
 			isWrite = true;
 			
-			System.out.println("»õ °Ô½Ã±ÛÀÌ µî·ÏµÇ¾ú½À´Ï´Ù.");
+			System.out.println("ìƒˆ ê²Œì‹œê¸€ì´ ë“±ë¡ë˜ì—ˆìŠµë‹ˆë‹¤.");
 			System.out.println(bdto.getTitle() + "/" + bdto.getWriter());
 			
 		} catch (Exception e) {
@@ -161,15 +162,69 @@ public class BoardDAO {
 		
 	}
 	
-	//Å×½ºÆ® µ¥ÀÌÅÍ »ı¼º
+	//í…ŒìŠ¤íŠ¸ ë°ì´í„° ìƒì„±(50ê°œ)
 	public boolean dummyCreate(int num) {
+		
+		Random ran = new Random();
 		
 		boolean isDummy = false;
 		
-		String[] a = {"±è", "¹Ú", "ÀÌ", "ÃÖ", "À¯", "°­", "Ãµ", "Á¤", "¾È", "À±", "ÀÓ"};
-		
 		try {
 			
+			int maxRef = 1;
+			
+			conn = getConnection();
+			
+			pstmt = conn.prepareStatement("select max(ref) from board");
+			
+			rs = pstmt.executeQuery();
+			
+			if (rs.next()) {
+				maxRef = rs.getInt(1);
+			}
+						
+			String[] a = {"ê¹€", "ë°•", "ì´", "ìµœ", "ìœ ", "ê°•", "ì²œ", "ì •", "ì•ˆ", "ìœ¤", "ì„"};
+			String[] b = {"a", "b", "c", "d", "e", "f", "g", "i", "y", "u", "t"};
+			
+			for (int i = 1; i < 51; i++) {
+
+				String writer = "";
+				String email = "";
+				String title = "";
+				String password = "1111";
+				String content = "";
+				
+				for (int j = 0; j < 10; j++) {
+					
+					writer += a[ran.nextInt(a.length)];
+					title += a[ran.nextInt(a.length)];
+					content += a[ran.nextInt(a.length)];
+					
+					if (j > 4) {
+						email += b[ran.nextInt(b.length)];
+					}
+					
+				}
+				
+				email += "@gmail.com";
+				
+				String sql = "insert into board (writer, email, title, password, reg_Date, ref, re_step, re_level, read_count, content)"
+							+ " values(?, ?, ?, ?, now(), ?, 1, 1, 0, ?)";
+										
+				pstmt = conn.prepareStatement(sql);
+				pstmt.setString(1, writer);
+				pstmt.setString(2, email);
+				pstmt.setString(3, title);
+				pstmt.setString(4, password);
+				pstmt.setInt(5, maxRef+i);
+				pstmt.setString(6, content);
+				
+				pstmt.executeUpdate();
+				
+				isDummy = true;
+				
+			}
+						
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
@@ -182,7 +237,7 @@ public class BoardDAO {
 		
 	}
 	
-	//ÀüÃ¼ °Ô½Ã±Û ¸ñ·Ï
+	//ì „ì²´ ê²Œì‹œê¸€ ëª©ë¡
 	public ArrayList<BoardDTO> getAllBoard() {
 		
 		ArrayList<BoardDTO> boardList = new ArrayList<BoardDTO>();
@@ -229,7 +284,7 @@ public class BoardDAO {
 		
 	}
 	
-	//ÇÏ³ªÀÇ °Ô½Ã±Û Á¶È¸(Á¶È¸¼ö Áõ°¡)
+	//í•˜ë‚˜ì˜ ê²Œì‹œê¸€ ì¡°íšŒ(ì¡°íšŒìˆ˜ ì¦ê°€)
 	public BoardDTO getOneBaord(int num) {
 		
 		BoardDTO bdto = new BoardDTO();
@@ -276,7 +331,7 @@ public class BoardDAO {
 		
 	}
 	
-	//ÇÏ³ªÀÇ °Ô½Ã±Û ¼öÁ¤À» À§ÇÑ Á¶È¸(Á¶È¸¼ö Áõ°¡X)
+	//í•˜ë‚˜ì˜ ê²Œì‹œê¸€ ìˆ˜ì •ì„ ìœ„í•œ ì¡°íšŒ(ì¡°íšŒìˆ˜ ì¦ê°€X)
 	public BoardDTO getUpdateBaord(int num) {
 		
 		BoardDTO bdto = new BoardDTO();
@@ -318,7 +373,7 @@ public class BoardDAO {
 		
 	}
 		
-	//°Ô½Ã±Û ¼öÁ¤
+	//ê²Œì‹œê¸€ ìˆ˜ì •
 	public boolean updateBoard(BoardDTO bdto) {
 		
 		boolean isUpdate = false;
@@ -338,7 +393,7 @@ public class BoardDAO {
 				
 				isUpdate = true;
 				
-				System.out.println("°Ô½Ã±ÛÀÌ ¼öÁ¤µÇ¾ú½À´Ï´Ù.");
+				System.out.println("ê²Œì‹œê¸€ì´ ìˆ˜ì •ë˜ì—ˆìŠµë‹ˆë‹¤.");
 				System.out.println(bdto.getNum() + "/" + bdto.getTitle() + "/" + bdto.getContent());
 				
 			}
@@ -355,7 +410,7 @@ public class BoardDAO {
 		
 	}
 	
-	//°Ô½Ã±Û »èÁ¦
+	//ê²Œì‹œê¸€ ì‚­ì œ
 	public boolean deleteBaord(BoardDTO bdto) {
 		
 		boolean isDelete = false;
@@ -373,7 +428,7 @@ public class BoardDAO {
 				
 				isDelete = true;
 				
-				System.out.println("°Ô½Ã±ÛÀÌ »èÁ¦µÇ¾ú½À´Ï´Ù.");
+				System.out.println("ê²Œì‹œê¸€ì´ ì‚­ì œë˜ì—ˆìŠµë‹ˆë‹¤.");
 				System.out.println(bdto.getNum() + "/" + bdto.getWriter() + "/" + bdto.getTitle());
 				
 			}
@@ -390,7 +445,7 @@ public class BoardDAO {
 		
 	}
 	
-	//´äº¯±Û ¾²±â(»õ °Ô½Ã±Û ref=¿øº» ref / re_step=¿øº» re_step+1 / re_level=¿øº» re_level+1)
+	//ë‹µë³€ê¸€ ì“°ê¸°(ìƒˆ ê²Œì‹œê¸€ ref=ì›ë³¸ ref / re_step=ì›ë³¸ re_step+1 / re_level=ì›ë³¸ re_level+1)
 	public boolean reWriteBoard(BoardDTO bdto) {
 		
 		boolean isReWrite = false;
@@ -426,7 +481,7 @@ public class BoardDAO {
 			
 			isReWrite = true;
 			
-			System.out.println("´äº¯±ÛÀÌ µî·ÏµÇ¾ú½À´Ï´Ù.");
+			System.out.println("ë‹µë³€ê¸€ì´ ë“±ë¡ë˜ì—ˆìŠµë‹ˆë‹¤.");
 			System.out.println(bdto.getTitle() + "/" + bdto.getWriter());
 			
 		} catch (Exception e) {
