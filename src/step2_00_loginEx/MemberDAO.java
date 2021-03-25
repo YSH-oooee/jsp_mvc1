@@ -7,7 +7,7 @@ import java.sql.ResultSet;
 
 public class MemberDAO {
 	
-	//singleTon ÆÐÅÏ
+	//singleTon íŒ¨í„´
 	private MemberDAO() {}
 	private static MemberDAO instance = new MemberDAO();
 	public static MemberDAO getInstance() {
@@ -25,7 +25,7 @@ public class MemberDAO {
 		String dbPass = "root";
 		
 		try {
-			//.cj°¡ ºÙÀ¸¸é ±¸¹öÀü
+			//.cj >> ì‹ ë²„ì „
 			Class.forName("com.mysql.jdbc.Driver");
 			
 			conn = DriverManager.getConnection(dbUrl, dbId, dbPass);
@@ -52,7 +52,7 @@ public class MemberDAO {
 			
 			rs = pstmt.executeQuery();
 			
-			//Á¶È¸µÈ id°¡ ¾ø´Ù¸é, °¡ÀÔ °¡´É
+			//ï¿½ï¿½È¸ï¿½ï¿½ idï¿½ï¿½ ï¿½ï¿½ï¿½Ù¸ï¿½, ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
 			if (!rs.next()) {
 				
 				pstmt = conn.prepareStatement("insert into member values(?, ?, ?, now())");
@@ -101,7 +101,7 @@ public class MemberDAO {
 				
 				isLeaveMember = true;
 				
-				System.out.println("Member Å×ÀÌºíÀÇ °èÁ¤ÀÌ »èÁ¦µÇ¾ú½À´Ï´Ù.");
+				System.out.println("Member ï¿½ï¿½ï¿½Ìºï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ç¾ï¿½ï¿½ï¿½ï¿½Ï´ï¿½.");
 				System.out.println(id + " / " + passwd);
 			}
 			
@@ -141,7 +141,7 @@ public class MemberDAO {
 				
 				isUpdateMember = true;
 				
-				System.out.println("Member Å×ÀÌºíÀÌ ¼öÁ¤µÇ¾ú½À´Ï´Ù.");
+				System.out.println("Member ï¿½ï¿½ï¿½Ìºï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ç¾ï¿½ï¿½ï¿½ï¿½Ï´ï¿½.");
 				System.out.println(mdto.getId() + " / " + mdto.getPasswd() + " / " + mdto.getName());
 			}
 			

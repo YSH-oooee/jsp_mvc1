@@ -41,7 +41,7 @@ public class BoardDAO {
 		
 	}
 	
-	//°Ô½Ã±Û µî·Ï
+	//ê²Œì‹œê¸€ ìƒì„±
 	public void insertBoard(BoardDTO bdto) {
 		
 		try {
@@ -60,7 +60,7 @@ public class BoardDAO {
 			
 			pstmt.executeUpdate();
 			
-			System.out.println("°Ô½Ã±ÛÀÌ Ãß°¡ µÇ¾ú½À´Ï´Ù.");
+			System.out.println("ï¿½Ô½Ã±ï¿½ï¿½ï¿½ ï¿½ß°ï¿½ ï¿½Ç¾ï¿½ï¿½ï¿½ï¿½Ï´ï¿½.");
 			System.out.println(bdto.getSubject() + " / " + bdto.getWriter());
 			
 		} catch (Exception e) {
@@ -73,7 +73,7 @@ public class BoardDAO {
 		
 	}
 	
-	//°Ô½Ã±Û ¸ñ·Ï Á¶È¸
+	//ì „ì²´ ê²Œì‹œê¸€ ì¡°íšŒ
 	public ArrayList<BoardDTO> getAllBoard() {
 		
 		ArrayList<BoardDTO> boardList = new ArrayList<BoardDTO>();
@@ -117,7 +117,7 @@ public class BoardDAO {
 		
 	}
 	
-	//ÇÏ³ªÀÇ °Ô½Ã±Û Á¶È¸
+	//í•˜ë‚˜ì˜ ê²Œì‹œê¸€ ì¡°íšŒ
 	public BoardDTO getOneBoard(int bNum) {
 		
 		BoardDTO bdto = new BoardDTO();
@@ -159,7 +159,7 @@ public class BoardDAO {
 		
 	}
 	
-	//ÇÏ³ªÀÇ °Ô½Ã±Û ¼öÁ¤À» À§ÇÑ Á¶È¸(Á¶È¸¼ö Áõ°¡X)
+	//ê²Œì‹œê¸€ ìˆ˜ì •ì„ ìœ„í•œ ì¡°íšŒ(ì¡°íšŒìˆ˜ ì¦ê°€X)
 	public BoardDTO getOneUpdateBaord(int num) {
 		
 		BoardDTO bdto = new BoardDTO();
@@ -197,7 +197,7 @@ public class BoardDAO {
 		
 	}
 	
-	//ºñ¹Ğ¹øÈ£ ÀÎÁõ
+	//ë¹„ë°€ë²ˆí˜¸ ì¸ì¦
 	public boolean validMemberCheck(BoardDTO bdto) {
 		
 		boolean isValidMember = false;
@@ -228,14 +228,14 @@ public class BoardDAO {
 		
 	}
 	
-	//°Ô½Ã±Û ¼öÁ¤
+	//ê²Œì‹œê¸€ ìˆ˜ì •
 	public boolean updateBoard(BoardDTO bdto) {
 		
 		boolean isUpdate = false;
 		
 		try {
 			
-			//ºñ¹Ğ¹øÈ£ ÀÎÁõ
+			//ï¿½ï¿½Ğ¹ï¿½È£ ï¿½ï¿½ï¿½ï¿½
 			if (validMemberCheck(bdto)) {
 				
 				conn = getConnection();
@@ -249,7 +249,7 @@ public class BoardDAO {
 				
 				isUpdate = true;
 				
-				System.out.println("boardÅ×ÀÌºíÀÌ ¾÷µ¥ÀÌÆ® µÇ¾ú½À´Ï´Ù.");
+				System.out.println("boardï¿½ï¿½ï¿½Ìºï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ® ï¿½Ç¾ï¿½ï¿½ï¿½ï¿½Ï´ï¿½.");
 				System.out.println(bdto.getNum() + " / " + bdto.getWriter() + " / " + bdto.getSubject());
 				
 			}
@@ -266,13 +266,13 @@ public class BoardDAO {
 		
 	}
 	
-	//°Ô½Ã±Û »èÁ¦
+	//ê²Œì‹œê¸€ ì‚­ì œ
 	public boolean deleteBoard(BoardDTO bdto) {
 		
 		boolean isDelete = false;
 		System.out.println(bdto.getPassword());
 		try {			
-			//ºñ¹Ğ¹øÈ£ ÀÎÁõ
+			//ï¿½ï¿½Ğ¹ï¿½È£ ï¿½ï¿½ï¿½ï¿½
 			if (validMemberCheck(bdto)) {
 				
 				conn = getConnection();
@@ -284,7 +284,7 @@ public class BoardDAO {
 				
 				isDelete = true;
 				
-				System.out.println("boardÅ×ÀÌºíÀÇ ¸â¹ö°¡ »èÁ¦ µÇ¾ú½À´Ï´Ù.");
+				System.out.println("boardï¿½ï¿½ï¿½Ìºï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Ç¾ï¿½ï¿½ï¿½ï¿½Ï´ï¿½.");
 				System.out.println(bdto.getNum() + " / " + bdto.getWriter() + " / " + bdto.getSubject());
 				
 			}
