@@ -12,15 +12,38 @@
 <body>
 
 	<%
+		request.setCharacterEncoding("utf-8");
+		
+		//검색분류
+		String searchOP = request.getParameter("searchOP");
+		if(searchOP == null) { searchOP = "all"; }
+		
+		//검색어
+		String searchWord = request.getParameter("searchWord");
+		if(searchWord == null) { searchWord = ""; }
+		
+		//페이지 당 게시글 수
+		String temp_count = request.getParameter("view_count");
+		if(temp_count == null) { temp_count = "10"; }
+		int view_count = Integer.parseInt(temp_count);
+		
+		//현재 페이지
+		String temp_page = request.getParameter("cur_page");
+		if(temp_page == null) { temp_count = "1"; }
+		int cur_page = Integer.parseInt(temp_page);
+		
 		//전체 게시글 개수
-		int count = BoardDAO.getInstance().getAllBaordCount();
-	
+		int total_count = BoardDAO.getInstance().getAllBaordCount(searchOP, searchWord);
+		
+		//각 페이지의 시작 글번호
+		int startNum = (cur_page - 1) * view_count;
+		
 		//전체 게시글 불러오기
-		ArrayList<BoardDTO> boardList = BoardDAO.getInstance().getAllBoard();
+		ArrayList<BoardDTO> boardList = BoardDAO.getInstance().getAllBoard(searchOP, searchWord, startNum, view_count);
 	%>
 
 	<div align="right">
-		<input type="button" value="테스트 데이터 생성" onclick="location.href='99_dummyCreate.jsp?num=10'">
+		<input type="button" value="테스트 데이터 생성" onclick="location.href='99_dummyCreate.jsp'">
 	</div>
 	
 	<div align="center">
@@ -30,9 +53,9 @@
 		
 		<table border="1" width="800">
 			<tr>
-				<td align="center" width="100">총 게시글 : <%= count %>개</td>
+				<td align="center" width="100">총 게시글 : <%= total_count %>개</td>
 				<td colspan="4" align="right">
-					<select name=board_count>
+					<select name=view_count>
 						<option value="5">5개씩 보기</option>
 						<option value="7">7개씩 보기</option>
 						<option value="10" selected>10개씩 보기</option>
@@ -62,7 +85,7 @@
 	<%
 				}
 	%>
-				└ &nbsp;
+				└&nbsp;
 	<%
 			}
 	%>
@@ -95,6 +118,56 @@
 			</tr>
 		</table>
 	
+	</div>
+	<!-- 페이징 -->
+	<div align="center">	
+	<%
+		if(total_count > 0) {
+			
+			int less_count = total_count % view_count == 0 ? 0 : 1;
+			int page_count = total_count / view_count + less_count;
+			
+			//시작 페이지
+			int startPage = 1;			
+			if(cur_page % 10 == 0) {
+				startPage = (cur_page /10 - 1) * 10 + 1;
+			} else {
+				startPage = (cur_page / 10) * 10 + 1;
+			}
+			
+			//마지막 페이지
+			int endPage = startPage + 9;
+			if(endPage > page_count) {
+				endPage = page_count;
+			}
+			
+			//전체 게시글 개수가 페이지 당 게시글 개수보다 적을 때
+			if(view_count > total_count) {
+				startPage = 1;
+				endPage = 0;
+			}
+			
+			//페이지 출력
+			if(startPage > 10) {
+	%>
+				<a href="04_bList.jsp?cur_page=<%=startPage-10%>&view_count=<%=view_count%>&searchOP=<%=searchOP%>&searchWord=<%=searchWord%>">[이전]</a>
+	<%
+			}
+			
+			for(int i = startPage; i <= endPage; i++) {
+	%>
+				<a href="04_bList.jsp?cur_page=<%=i%>&view_count=<%=view_count%>&searchOP=<%=searchOP%>&searchWord=<%=searchWord%>"> [<%=i %>] </a>
+	<%
+			}
+			
+			if(endPage == page_count && endPage > 10) {
+	%>
+				<a href="04_bList.jsp?cur_page=<%=startPage+10%>&view_count=<%=view_count%>&searchOP=<%=searchOP%>&searchWord=<%=searchWord%>">[다음]</a>
+	<%
+			}
+			
+		}
+	%>	
 	</div>
 
 </body>

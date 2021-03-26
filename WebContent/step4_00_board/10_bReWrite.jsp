@@ -22,7 +22,7 @@
 		<!-- 작성자, 제목, 이메일, 비밀번호 반드시 입력 -->
 		<h2>답변글 쓰기</h2>
 	
-		<form action="03_bWritePro.jsp" method="post">
+		<form action="11_bReWritePro.jsp" method="post">
 			<table border="1" width="700">
 				<tr>
 					<td width="150" align="center">작성자</td>

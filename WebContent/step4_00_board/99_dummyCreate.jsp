@@ -10,11 +10,7 @@
 <body>
 
 	<%
-		request.setCharacterEncoding("utf-8");
-	
-		int num = Integer.parseInt(request.getParameter("num"));
-	
-		boolean isDummy = BoardDAO.getInstance().dummyCreate(num);
+		boolean isDummy = BoardDAO.getInstance().dummyCreate();
 	
 		if(isDummy) {
 	%>
