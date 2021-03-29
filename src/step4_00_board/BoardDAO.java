@@ -46,24 +46,25 @@ public class BoardDAO {
 	}
 	
 	//전체 게시글 개수
-	public int getAllBaordCount(String searchOP, String searchWord) {
+	public int getAllBaordCount(String searchKeyword, String searchWord) {
 		
 		int count = 0;
-		String sql = null;
 		
 		try {
 			
 			conn = getConnection();
 			
-			if (searchOP.equals("all")) {
+			String sql = null;
+			
+			if (searchKeyword.equals("all")) {
 				if (searchWord.equals("")) {	//전체 게시글 수
 					sql = "SELECT COUNT(*) FROM BOARD";
 				} else {						//제목이나 작성자에 검색어를 포함한 게시글 수
 					sql = "SELECT COUNT(*) FROM BOARD WHERE TITLE LIKE '%" + searchWord + "%'"
 						+ " OR WRITER LIKE '%" + searchWord + "%'";
 				}
-			} else {
-				sql = "SELECT COUNT(*) FROM BOARD WHERE " + searchOP + " LIKE '%" + searchWord + "%'";
+			} else {	//검색 옵션에서 검색어를 포함한 게시글 수
+				sql = "SELECT COUNT(*) FROM BOARD WHERE " + searchKeyword + " LIKE '%" + searchWord + "%'";
 			}
 			
 			pstmt = conn.prepareStatement(sql);
@@ -250,37 +251,37 @@ public class BoardDAO {
 	}
 	
 	//전체 게시글 목록(검색분류, 검색단어, 페이지시작게시글번호, 페이지당게시글개수)
-	public ArrayList<BoardDTO> getAllBoard(String searchOP, String searchWord, int startNum, int view_count) {
+	public ArrayList<BoardDTO> getAllBoard(String searchKeyword, String searchWord, int startBoardIdx, int onePageViewCount) {
 		
 		ArrayList<BoardDTO> boardList = new ArrayList<BoardDTO>();	//출력 할 게시글 목록
-		BoardDTO bdto;
+		BoardDTO bdto = null;
 		
 		try {
 			
 			conn = getConnection();
-				
-			bdto = new BoardDTO();		//출력 할 게시글 정보
-			String sql = null;
 			
-			if (searchOP.equals("all")) {		//전체 검색
+			String sql = "";
+			
+			if (searchKeyword.equals("all")) {		//전체 검색
 				
 				if (searchWord.equals("")) {
 					//전체 게시글을 가져오되, 페이지당 게시글 개수에 맞게 가져옴
-					sql = "SELECT * FROM BOARD ORDER BY REF DESC RE_LEVEL LIMIT ?,?";
+					sql = "SELECT * FROM BOARD ORDER BY REF DESC, RE_STEP LIMIT ?,?";
 				} else {
 					//제목이나 작성자에 searchWord를 포함한 게시글만 가져옴
-					sql = "SELECT * FROM BOARD WHERE TITLE OR WRITER LIKE '%" + searchWord
-						+ "%' ORDER BY REF DESC RE_LEVEL LIMIT ?,?";
+					sql = "SELECT * FROM BOARD WHERE TITLE LIKE '%" + searchWord
+						+ "%' OR WRITER  LIKE '%" + searchWord
+						+ "%' ORDER BY REF DESC, RE_STEP LIMIT ?,?";
 				}
 				
-			} else {		//searchOP(제목 혹은 작성자)에서 searchWord 포함한 검색
-				sql = "SELECT * FROM BOARD WHERE " + searchOP + " LIKE '%" + searchWord
-						+ " ORDER BY REF DESC RE_LEVEL LIMIT ?,?";
+			} else {		//searchKeyword(제목 혹은 작성자)에서 searchWord 포함한 검색
+				sql = "SELECT * FROM BOARD WHERE " + searchKeyword + " LIKE '%" + searchWord
+					+ "%' ORDER BY REF DESC, RE_STEP LIMIT ?,?";
 			}
 			
 			pstmt = conn.prepareStatement(sql);
-			pstmt.setInt(1, startNum);
-			pstmt.setInt(2, view_count);
+			pstmt.setInt(1, startBoardIdx);
+			pstmt.setInt(2, onePageViewCount);
 			
 			rs = pstmt.executeQuery();
 			
@@ -304,7 +305,7 @@ public class BoardDAO {
 				
 			}
 			
-			System.out.println("검색조건 : " + searchOP + "/" + searchWord);
+			System.out.println("검색조건 : " + searchKeyword + "/" + searchWord);
 			
 		} catch (Exception e) {
 			e.printStackTrace();
